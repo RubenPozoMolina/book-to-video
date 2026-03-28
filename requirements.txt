@@ -1,0 +1,23 @@
+# Requirements for book-to-video project
+# Using local AI models and OpenCV/MoviePy for video generation.
+
+# Core utilities
+pydantic  # For structured data and configuration
+tqdm      # Progress bars
+
+# Text processing
+ebooklib  # For EPUB/PDF reading
+beautifulsoup4  # For HTML cleaning in EPUBs
+
+# Audio generation (local AI)
+# Using pyttsx3 as a fallback or simpler local TTS for Python 3.12+ 
+# or suggest user to use a docker container/separate env for Coqui TTS if needed.
+pyttsx3
+
+# Image/Video generation
+moviepy
+Pillow
+numpy
+
+# Optional: Local LLM interaction
+# ollama
