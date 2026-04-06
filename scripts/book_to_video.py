@@ -2,6 +2,7 @@ import os
 import argparse
 from tqdm import tqdm
 from src.processors.epub_parser import EpubParser
+from src.processors.markdown_parser import MarkdownParser
 from src.generators.audio_generator import Pyttsx3AudioGenerator
 from src.generators.video_generator import SimpleVideoGenerator
 
@@ -45,14 +46,19 @@ class BookToVideoOrchestrator:
         print(f"[*] Done! Videos are in {os.path.join(self.output_dir, 'video')}")
 
 def main():
-    parser = argparse.ArgumentParser(description="Convert an EPUB book to chapter-wise YouTube videos.")
-    parser.add_argument("input", help="Path to the EPUB file")
+    parser = argparse.ArgumentParser(description="Convert an EPUB or Markdown book to chapter-wise YouTube videos.")
+    parser.add_argument("input", help="Path to the EPUB or Markdown file")
     parser.add_argument("--output", default="output", help="Output directory")
+    parser.add_argument("--language", "-l", default="en", help="Language code for TTS (e.g., 'en', 'es')")
     args = parser.parse_args()
 
     # Initialize components
-    book_parser = EpubParser()
-    audio_generator = Pyttsx3AudioGenerator(rate=150)
+    if args.input.lower().endswith(('.md', '.markdown')):
+        book_parser = MarkdownParser()
+    else:
+        book_parser = EpubParser()
+    
+    audio_generator = Pyttsx3AudioGenerator(rate=150, language=args.language)
     video_generator = SimpleVideoGenerator()
 
     # Run orchestrator
@@ -62,7 +68,11 @@ def main():
         video_generator, 
         output_dir=args.output
     )
-    orchestrator.run(args.input)
+    try:
+        orchestrator.run(args.input)
+    finally:
+        if hasattr(audio_generator, 'stop'):
+            audio_generator.stop()
 
 if __name__ == "__main__":
     main()

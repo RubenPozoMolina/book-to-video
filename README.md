@@ -1,65 +1,71 @@
 # Book to Video Converter
 
-Este proyecto permite convertir un libro (formato EPUB) en una serie de vídeos (uno por capítulo) adecuados para YouTube. Utiliza modelos de IA locales para la generación de audio y librerías de Python para la creación de vídeo.
+This project allows you to convert a book (EPUB or Markdown format) into a series of videos (one per chapter) suitable for YouTube. It uses local AI models for audio generation and Python libraries for video creation.
 
-## Requisitos
+## Requirements
 
 - Python 3.12+
-- `ffmpeg` instalado en el sistema (requerido por `moviepy`)
-- Dependencias de Python listadas en `requirements.txt` o instaladas vía `pip`
+- `ffmpeg` installed on your system (required for `moviepy`)
+- Python dependencies listed in `requirements.txt`
 
-## Instalación
+## Installation
 
-### 1. Clonar el repositorio
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Ensure `ffmpeg` is installed:
+   - **Ubuntu/Debian**: `sudo apt install ffmpeg`
+   - **macOS**: `brew install ffmpeg`
+   - **Windows**: Download the binary from [ffmpeg.org](https://ffmpeg.org/) and add it to your PATH.
+
+## Usage
+
+Run the main script providing the path to your EPUB or Markdown book and the desired language (default is 'en'):
+
 ```bash
-git clone https://github.com/RubenPozoMolina/book-to-video.git
-cd book-to-video
+PYTHONPATH=. python scripts/book_to_video.py path/to/your/book.epub --output my_videos --language es
 ```
 
-### 2. Instalar dependencias
-Puedes instalar las dependencias directamente:
+Or for a Markdown file:
+
 ```bash
-pip install -r requirements.txt
-```
-O instalar el proyecto en modo editable:
-```bash
-pip install -e .
+PYTHONPATH=. python scripts/book_to_video examples/caracol_aventurero/caracol_aventurero.md --output output/caracol_aventurero --language es
 ```
 
-### 3. Asegurar que `ffmpeg` esté instalado
-- **Ubuntu/Debian**: `sudo apt install ffmpeg`
-- **macOS**: `brew install ffmpeg`
-- **Windows**: Descarga el binario desde [ffmpeg.org](https://ffmpeg.org/) y añádelo al PATH.
+### Book to Audio
 
-## Uso
+Si solo deseas generar los archivos de audio (MP3) por capítulos sin generar el video, puedes usar el script especializado:
 
-Si has instalado el proyecto con `pip install -e .`, puedes usar el comando directamente:
 ```bash
-book-to-video path/to/your/book.epub --output my_videos
+PYTHONPATH=. python scripts/book_to_audio.py examples/caracol_aventurero/caracol_aventurero.md --output output --voice es-ES-AlvaroNeural
 ```
 
-De lo contrario, ejecuta el script principal:
-```bash
-python -m src.book_to_video path/to/your/book.epub --output my_videos
-```
+Soporta los siguientes formatos: `.pdf`, `.md`, `.epub`, `.html`.
 
-## Arquitectura
+Opciones principales:
+- `--voice`: Voz de Edge TTS (ej. `es-ES-AlvaroNeural`, `en-US-AndrewNeural`). Por defecto usa una voz en español.
+- `--local`: Usa `pyttsx3` en lugar de Edge TTS para generación local (offline).
+- `--language`: Código de lenguaje si se usa `--local`.
 
-- **Diseño OOP**: El proyecto sigue los principios de Orientación a Objetos y Clean Code.
-- **Interfaces**: Definen el contrato para cada componente (`IBookParser`, `IAudioGenerator`, `IVideoGenerator`).
-- **Procesadores**: Implementaciones para parsear libros (ej. `EpubParser`).
-- **Generadores**: Implementaciones para crear audio (`Pyttsx3AudioGenerator`) y vídeo (`SimpleVideoGenerator`).
-- **IA Local**: Actualmente utiliza `pyttsx3` para texto a voz local. Se puede extender para usar Coqui TTS u otros modelos locales implementando la interfaz `IAudioGenerator`.
+## Architecture
 
-## Contribución
+- **OOP Design**: The project follows Object-Oriented principles and Clean Code.
+- **Interfaces**: Define the contract for each component (`IBookParser`, `IAudioGenerator`, `IVideoGenerator`).
+- **Processors**: Implementations for parsing books (e.g., `EpubParser`, `MarkdownParser`, `PdfParser`, `HtmlParser`).
+- **Generators**: Implementations for creating audio (`Pyttsx3AudioGenerator`, `EdgeTTSAudioGenerator`) and video (`SimpleVideoGenerator`).
+- **Local/Cloud TTS**: Soporta generación local con `pyttsx3` y voces naturales de Microsoft Edge via `edge-tts`.
 
-¡Las contribuciones son bienvenidas!
-1. Haz un Fork del proyecto.
-2. Crea una rama para tu característica (`git checkout -b feature/nueva-caracteristica`).
-3. Haz commit de tus cambios (`git commit -m 'Añadir nueva característica'`).
-4. Haz Push a la rama (`git push origin feature/nueva-caracteristica`).
-5. Abre un Pull Request.
+## Project Structure
 
-## Licencia
+- `src/interfaces/`: Abstract base classes.
+- `src/models/`: Data models (Chapter, Book).
+- `src/processors/`: Book parsing logic (EPUB, Markdown, PDF, HTML).
+- `src/generators/`: Audio and Video generation logic.
+- `scripts/book_to_video.py`: Main orchestrator.
+- `scripts/book_to_audio.py`: Audio generation script.
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+## License
+
+This project is licensed under the MIT License - see the `LICENSE` file for details.

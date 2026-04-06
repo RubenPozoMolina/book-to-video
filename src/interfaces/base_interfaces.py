@@ -20,7 +20,7 @@ class IAudioGenerator(ABC):
     """Interface for generating audio from text using local AI models."""
     @abstractmethod
     def generate_audio(self, text: str, output_path: str) -> str:
-        """Generates audio file from text and returns the path to the file."""
+        """Generates an audio file from text and returns the path to the file."""
         pass
 
 class IVideoGenerator(ABC):

@@ -152,3 +152,4 @@ cython_debug/
 # Output folders
 output/
 my_videos/
+/input/

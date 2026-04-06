@@ -22,6 +22,8 @@ dependencies = [
     "ebooklib",
     "beautifulsoup4",
     "pyttsx3",
+    "edge-tts",
+    "PyPDF2",
     "moviepy",
     "Pillow",
     "numpy",
@@ -32,4 +34,4 @@ dependencies = [
 "Bug Tracker" = "https://github.com/RubenPozoMolina/book-to-video/issues"
 
 [project.scripts]
-book-to-video = "src.book_to_video:main"
+book-to-video = "scripts.book_to_video:main"

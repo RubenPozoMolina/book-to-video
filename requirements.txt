@@ -13,6 +13,8 @@ beautifulsoup4  # For HTML cleaning in EPUBs
 # Using pyttsx3 as a fallback or simpler local TTS for Python 3.12+ 
 # or suggest user to use a docker container/separate env for Coqui TTS if needed.
 pyttsx3
+edge-tts
+PyPDF2
 
 # Image/Video generation
 moviepy
